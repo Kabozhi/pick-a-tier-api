@@ -1,60 +1,56 @@
 from http import HTTPStatus
 import os
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+import requests
+
+def search_decals(query, page_num=1):
+    url = 'https://search.roblox.com/catalog/json'
+    params = {
+        'Category': 8,  # Decal Category
+        'Subcategory': 1,  # Subcategory look for all
+        'Keyword': query,
+        'ResultsPerPage': 20,
+        'PageNumber': page_num,
+        'SortAggregation': 3
+    }
+
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()  # Raises an error for bad status codes
+
+        raw_results = response.json()  # Assuming the response is in JSON format
+
+        # Format the results
+        formatted_results = [
+            {
+                'AssetId': item.get('AssetId'),
+                'Name': item.get('Name'),
+                'Description': item.get('Description', 'No description available'),
+                'Creator': item.get('Creator', 'Unknown creator')
+            }
+            for item in raw_results
+        ]
+
+        return formatted_results
+
+    except requests.exceptions.RequestException as e:
+        return None
+
+
 
 def main(args):
-    '''
-    Takes in the email address, subject, and message to send an email using SendGrid, 
-    returns a json response letting the user know if the email sent or failed to send.
+    query = args.get("query")
+    page_num = args.get("pageNum")
 
-        Parameters:
-            args: Contains the from email address, to email address, subject and message to send
+    results = search_decals(query, page_num)
 
-        Returns:
-            json body: Json response if the email sent successfully or if an error happened
-    '''
-    key = os.getenv('API_KEY')
-    user_from = args.get("from")
-    user_to = args.get("to")
-    user_subject = args.get("subject")
-    content = args.get("content")
-
-    if not user_from:
+    if not results:
         return {
             "statusCode" : HTTPStatus.BAD_REQUEST,
-            "body" : "no user email provided"
-        }
-    if not user_to:
-        return {
-            "statusCode" : HTTPStatus.BAD_REQUEST,
-            "body" : "no receiver email provided"
-        }
-    if not user_subject:
-        return {
-            "statusCode" : HTTPStatus.BAD_REQUEST,
-            "body" : "no subject provided"
-        }
-    if not content:
-        return {
-            "statusCode" : HTTPStatus.BAD_REQUEST,
-            "body" : "no content provided"
+            "body" : "An error occured"
         }
 
-    sg = SendGridAPIClient(key)
-    message = Mail(
-        from_email = user_from,
-        to_emails = user_to,
-        subject = user_subject,
-        html_content = content)
-    response = sg.send(message)
-
-    if response.status_code != 202:
-        return {
-            "statusCode" : response.status_code,
-            "body" : "email failed to send"
-        }
+    
     return {
         "statusCode" : HTTPStatus.ACCEPTED,
-        "body" : "success"
+        "body" : results
     }
