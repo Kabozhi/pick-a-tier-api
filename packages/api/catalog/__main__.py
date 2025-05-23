@@ -3,18 +3,24 @@ import os
 import requests
 
 def search_decals(query, page_num=1):
-    url = 'https://search.roblox.com/catalog/json'
+    url = 'https://catalog.roblox.com/v1/search/items'
     params = {
-        'Category': 8,  # Decal Category
-        'Subcategory': 1,  # Subcategory look for all
+        'Category': 8,  # Decals
+        'Limit': 20,
         'Keyword': query,
-        'ResultsPerPage': 20,
-        'PageNumber': page_num,
-        'SortAggregation': 3
+        'Page': page_num,
+        'SortType': 3,
+        'Subcategory': 1,
+        'CreatorType': 'User'
     }
 
+    headers = {
+        'User-Agent': 'Mozilla/5.0'  # Helps avoid being blocked
+    }
+
+
     try:
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()  # Raises an error for bad status codes
 
         raw_results = response.json()  # Assuming the response is in JSON format
