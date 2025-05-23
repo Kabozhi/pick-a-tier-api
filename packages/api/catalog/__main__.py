@@ -18,7 +18,8 @@ def search_decals(query, page_num=1):
         'User-Agent': 'Mozilla/5.0'  # Helps avoid being blocked
     }
 
-
+        logging.debug(f"Sending request to {url} with params: {params}")
+    
     try:
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()  # Raises an error for bad status codes
@@ -39,6 +40,7 @@ def search_decals(query, page_num=1):
         return formatted_results
 
     except requests.exceptions.RequestException as e:
+    logging.error(f"Request failed: {e}")
         return None
 
 
