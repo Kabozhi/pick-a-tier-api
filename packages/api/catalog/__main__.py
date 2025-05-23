@@ -18,8 +18,6 @@ def search_decals(query, page_num=1):
         'User-Agent': 'Mozilla/5.0'  # Helps avoid being blocked
     }
 
-        logging.debug(f"Sending request to {url} with params: {params}")
-    
     try:
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()  # Raises an error for bad status codes
@@ -40,7 +38,6 @@ def search_decals(query, page_num=1):
         return formatted_results
 
     except requests.exceptions.RequestException as e:
-    logging.error(f"Request failed: {e}")
         return None
 
 
@@ -48,10 +45,12 @@ def search_decals(query, page_num=1):
 def main(args):
     query = args.get("query")
     page_num = args.get("pageNum")
-
+    
+    print(f"Function called with args: {args}")
     results = search_decals(query, page_num)
 
     if not results:
+        print("search_decals returned None or empty result.")
         return {
             "statusCode" : HTTPStatus.BAD_REQUEST,
             "body" : "An error occured"
