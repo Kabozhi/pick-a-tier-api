@@ -14,7 +14,7 @@ def search_decals(query, page_num=1):
         'CreatorType': 'User'
     }
 
-    print(f"Searching for decals with query: {query}, page: {page_num}")
+    print("Searching for decals with query: {query}, page: {page_num}")
     headers = {
         'User-Agent': 'Mozilla/5.0'  # Helps avoid being blocked
     }
