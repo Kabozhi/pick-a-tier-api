@@ -1,8 +1,13 @@
 from http import HTTPStatus
 import os
 import requests
+import logging
+
+logger = logging.getLogger()
 
 def search_decals(query, page_num=1):
+    logger.info(f"DEBUG: Received args: {args}")
+
     url = 'https://catalog.roblox.com/v1/search/items'
     params = {
         'Category': 8,  # Decals
