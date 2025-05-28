@@ -2,12 +2,12 @@ alerts:
 - rule: DEPLOYMENT_FAILED
 - rule: DOMAIN_FAILED
 functions:
-- github:
-    branch: main
-    deploy_on_push: true
-    repo: capedbojji/pick-a-tier-api
-  name: catalog-api
-  routes:
-  - path: /
-  source_dir: /
+  - github:
+      branch: main
+      deploy_on_push: true
+      repo: Kabozhi/pick-a-tier-api
+    name: catalog-api
+    routes:
+      - path: /
+    source_dir: /
 name: pick-a-tier
