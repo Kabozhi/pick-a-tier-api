@@ -9,5 +9,5 @@ functions:
     name: catalog-api
     routes:
       - path: /
-    source_dir: /
+    source_dir: packages/api/catalog
 name: pick-a-tier
