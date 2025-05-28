@@ -14,6 +14,7 @@ def search_decals(query, page_num=1):
         'CreatorType': 'User'
     }
 
+    console.log(f"Searching for decals with query: {query}, page: {page_num}")
     headers = {
         'User-Agent': 'Mozilla/5.0'  # Helps avoid being blocked
     }
@@ -39,8 +40,6 @@ def search_decals(query, page_num=1):
 
     except requests.exceptions.RequestException as e:
         return None
-
-
 
 def main(args):
     query = args.get("query")
