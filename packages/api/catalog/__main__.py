@@ -6,7 +6,7 @@ def search_decals(query, page_num=1):
     url = 'https://catalog.roblox.com/v1/search/items'
     params = {
         'Category': 8,  # Decals
-        'Limit': 20,
+        'Limit': 10,
         'Keyword': query,
         'Page': page_num,
         'SortType': 3,
@@ -14,7 +14,6 @@ def search_decals(query, page_num=1):
         'CreatorType': 'User'
     }
 
-    print("Searching for decals with query: {query}, page: {page_num}")
     headers = {
         'User-Agent': 'Mozilla/5.0'  # Helps avoid being blocked
     }
@@ -40,6 +39,8 @@ def search_decals(query, page_num=1):
 
     except requests.exceptions.RequestException as e:
         return None
+
+
 
 def main(args):
     query = args.get("query")
